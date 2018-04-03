@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2015
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "shortwords", "shortwords\shortwords.pyproj", "{3787DA94-0C82-4230-A22C-19EC3FC68F57}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3787DA94-0C82-4230-A22C-19EC3FC68F57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3787DA94-0C82-4230-A22C-19EC3FC68F57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {77675A9D-A1C4-4E0B-8C00-C41F07300163}
+	EndGlobalSection
+EndGlobal
