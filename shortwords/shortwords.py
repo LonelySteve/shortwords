@@ -67,9 +67,9 @@ class QShortWords(ShortWords):
         实例化当前对象\n
         args:\n
             mesFormat:格式化的字符串，用于组织微语的排版，格式符见下\n
-                #表情:(玫瑰 得意 鼓掌 卖萌 奋斗 喝彩 街舞...)\n
+                #[早上|中午|下午|晚上|深夜]时间段:(晚上好~~...)\n
                 #[今天|明天|后天]天气:[日期|高温|低温|风向|风力|类型]\n
-            sendObj:发送对象，类型为 SendObj，默认为空
+                #表情:(玫瑰 得意 鼓掌 卖萌 奋斗 喝彩 街舞...)\n
         """
         self.__mesFormat = mesFormat
         super().__init__()
@@ -115,9 +115,38 @@ class QShortWords(ShortWords):
             else:
                 return matched.group(0)[1:]
 
-        temp = re.sub('(#{1,})(今天|明天|后天)天气:(日期|高温|低温|风向|风力|类型)',
-                      rap_weather, self.__mesFormat)
-        return re.sub(r'(#{1,})表情:\(([^\)]*)\)', rap_random_face, temp)
+        def rep_t(matched):
+            sharp = matched.group(1)
+            time_flag = matched.group(2)
+            ct = matched.group(3)
+            if len(sharp) == 1:
+                now_time = time.localtime(time.time())
+                if time_flag == '早上':
+                    if  5 <= now_time.tm_hour <= 9:
+                        return ct
+                    else: return None
+                elif time_flag == '中午':
+                     if 10 <= now_time.tm_hour <= 13:
+                        return ct
+                     else: return None
+                elif time_flag == '下午':
+                     if 14 <= now_time.tm_hour <= 19:
+                        return ct
+                     else: return None
+                elif time_flag == '晚上':
+                     if 20 <= now_time.tm_hour <= 23:
+                        return ct
+                     else: return None
+                elif time_flag == '深夜':
+                     if 0 <= now_time.tm_hour <= 4:
+                        return ct
+                     else: return None
+            else:
+                return matched.group(0)[1:]
+
+        temp = re.sub(r'(#{1,})(今天|明天|后天)天气:(日期|高温|低温|风向|风力|类型)',rap_weather, self.__mesFormat)
+        temp = re.sub(r'(#{1,})表情:\(([^\)]*)\)', rap_random_face, temp)
+        return re.sub(r"(#{1,})(早上|中午|下午|晚上|深夜)时间段:\(([^\)]*)\)",rep_t,temp)
 
     @staticmethod
     def get_forecast_weather(citycode=101200801):
@@ -141,7 +170,7 @@ class QShortWords(ShortWords):
 
 class TShortWords(QShortWords):
     """
-    增加了小尾巴的QShortWord的子类
+    增加了小尾巴和时间段信息的QShortWord的子类
     """
 
     def __init__(self, mesFormat='#表情:(玫瑰)'):
@@ -149,10 +178,10 @@ class TShortWords(QShortWords):
         实例化当前对象\n
         args:\n
             mesFormat:格式化的字符串，用于组织微语的排版，格式符见下\n
-                #小尾巴:(E:\\TailPath|这是一条小尾巴~)
-                #表情:(玫瑰 得意 鼓掌 卖萌 奋斗 喝彩 街舞...)\n
+                #[早上|中午|下午|晚上|深夜]时间段:(晚上好~~...)\n
                 #[今天|明天|后天]天气:[日期|高温|低温|风向|风力|类型]\n
-            sendObj:发送对象，类型为 SendObj，默认为空
+                #表情:(玫瑰 得意 鼓掌 卖萌 奋斗 喝彩 街舞...)\n
+                #小尾巴:(E:\\TailPath|这是一条小尾巴~)\n
         """
         super().__init__(mesFormat)
 
@@ -179,11 +208,6 @@ class TShortWords(QShortWords):
             content = ''
             with open(filePath) as f:
                 content = f.read()
-                while len(content) > 120:
-                    print('预定义的尾巴无效！请确保字数在120字以内！')
-                    content = input('请直接在此终端输入小尾巴内容：\n')
-            with open(filePath, 'w+') as f:
-                f.write(content)
             return None if content == '' else content
         todayDat = time.localtime(time.time())
         if not os.path.exists(parentPath):
